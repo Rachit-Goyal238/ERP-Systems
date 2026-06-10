@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>
+Inventory Transaction History
+</h2>
+
+<table class="table table-bordered">
+
+<tr>
+    <th>Product</th>
+    <th>Type</th>
+    <th>Quantity</th>
+    <th>Date</th>
+</tr>
+
+{% for transaction in transactions %}
+
+<tr>
+
+<td>
+{{ transaction.product.product_name }}
+</td>
+
+<td>
+{{ transaction.transaction_type }}
+</td>
+
+<td>
+{{ transaction.quantity_changed }}
+</td>
+
+<td>
+{{ transaction.created_at }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

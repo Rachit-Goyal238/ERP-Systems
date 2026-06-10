@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ERP Dashboard V2</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            background:#f5f7fb;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .active-menu{
+
+          background:white !important;
+
+          color:#0d6efd !important;
+
+          font-weight:600;
+        }
+
+        .wrapper{
+            display:flex;
+            min-height:100vh;
+        }
+
+        .sidebar{
+
+            width:220px;
+
+            background:linear-gradient(
+                180deg,
+                #0d6efd,
+                #003c9e
+            );
+
+            color:white;
+
+            padding:25px;
+        }
+
+        .logo{
+
+            font-size:28px;
+
+            font-weight:700;
+
+            margin-bottom:40px;
+        }
+
+        .logo i{
+            margin-right:10px;
+        }
+
+        .sidebar-menu{
+
+            list-style:none;
+
+            padding:0;
+        }
+
+        .sidebar-menu li{
+            margin-bottom:10px;
+        }
+
+        .sidebar-menu a{
+
+            display:block;
+
+            color:white;
+
+            text-decoration:none;
+
+            padding:12px 15px;
+
+            border-radius:10px;
+
+            transition:0.3s;
+        }
+
+        .sidebar-menu a:hover{
+
+            background:rgba(
+                255,
+                255,
+                255,
+                0.15
+            );
+        }
+
+        .sidebar-menu i{
+            width:25px;
+        }
+
+          .main-content{
+
+              flex:1;
+
+              padding:15px;
+          }
+
+        .topbar{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:15px;
+        }
+
+        .search-box{
+
+            width:350px;
+        }
+
+        .search-box input{
+
+            border-radius:25px;
+        }
+
+        .user-panel{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:20px;
+        }
+
+        .notification{
+
+            font-size:22px;
+        }
+
+        .user-badge{
+
+            background:white;
+
+            padding:10px 18px;
+
+            border-radius:30px;
+
+            box-shadow:
+            0 4px 12px rgba(
+                0,
+                0,
+                0,
+                0.08
+            );
+        }
+
+        .card-custom{
+
+            background:white;
+
+            border:none;
+
+            border-radius:20px;
+
+            box-shadow:
+            0 5px 15px rgba(
+                0,
+                0,
+                0,
+                0.08
+            );
+
+            padding:12px;
+        }
+
+            .stat-card{
+
+                border-radius:20px;
+
+                padding:15px;
+
+                color:white;
+
+                box-shadow:
+                0 8px 20px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.10
+                );
+
+                transition:0.3s;
+            }
+
+            .stat-card:hover{
+
+                transform:
+                translateY(-5px);
+            }
+
+
+.stat-card h2{
+
+    font-size:16px;
+
+    margin-bottom:2px;
+}
+
+.stat-card p{
+
+    font-size:12px;
+
+    margin-bottom:0;
+}
+
+.stat-card{
+
+    min-height:70px;
+}
+
+.card-custom h4{
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.table{
+
+    font-size:13px;
+}
+
+
+        .stat-icon{
+
+            font-size:16px;
+
+            margin-bottom:10px;
+        }
+
+        .blue{
+            color:#0d6efd;
+        }
+
+        .green{
+            color:#198754;
+        }
+
+        .red{
+            color:#dc3545;
+        }
+
+        .purple{
+            color:#6f42c1;
+        }
+
+        table{
+
+            margin-top:15px;
+        }
+        
+        .table td,
+        .table th{
+
+            padding:6px;
+        }
+
+        .table thead{
+
+            background:#f1f3f6;
+        }
+
+        .badge-added{
+
+            background:#198754;
+            color:white;
+            padding:5px 10px;
+            border-radius:15px;
+        }
+
+        .badge-removed{
+
+            background:#dc3545;
+            color:white;
+            padding:5px 10px;
+            border-radius:15px;
+        }
+        
+        .chart-wrapper{
+
+    height:150px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <i class="fas fa-building"></i>
+
+            ERP System
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="/dashboard-v2/" class="active-menu">
+                    <i class="fas fa-chart-pie"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/employees/">
+                    <i class="fas fa-users"></i>
+                    Employees
+                </a>
+            </li>
+
+            <li>
+                <a href="/inventory/">
+                    <i class="fas fa-box"></i>
+                    Inventory
+                </a>
+            </li>
+
+            <li>
+                <a href="/inventory/transactions/">
+                    <i class="fas fa-arrow-right-arrow-left"></i>
+                    Transactions
+                </a>
+            </li>
+
+            <li>
+                <a href="/accounts/logout/">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+
+            <h2>
+
+                Dashboard
+
+            </h2>
+
+            <div class="user-panel">
+
+                <div class="search-box">
+
+                    <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search...">
+
+                </div>
+
+                <div class="notification position-relative">
+
+                        <i class="fas fa-bell"></i>
+
+                        <span
+                        class="position-absolute
+                              top-0
+                              start-100
+                              translate-middle
+                              badge
+                              rounded-pill
+                              bg-danger">
+
+                            {{ low_stock_count }}
+
+                        </span>
+
+                    </div>
+
+                <div class="user-badge">
+
+                    {{ request.user.username }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+<!-- STATS -->
+
+<div class="row g-2 mb-3">
+
+    <div class="col-lg-2 col-md-4 col-6">
+
+        <div class="stat-card"
+        style="background:linear-gradient(135deg,#0d6efd,#0a58ca);">
+
+            <div class="stat-icon">
+
+                <i class="fas fa-users"></i>
+
+            </div>
+
+            <h2>{{ employee_count }}</h2>
+
+            <p>Employees</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+
+        <div class="stat-card"
+        style="background:linear-gradient(135deg,#198754,#146c43);">
+
+            <div class="stat-icon">
+
+                <i class="fas fa-box"></i>
+
+            </div>
+
+            <h2>{{ product_count }}</h2>
+
+            <p>Products</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+
+        <div class="stat-card"
+        style="background:linear-gradient(135deg,#dc3545,#b02a37);">
+
+            <div class="stat-icon">
+
+                <i class="fas fa-exclamation-triangle"></i>
+
+            </div>
+
+            <h2>{{ low_stock_count }}</h2>
+
+            <p>Low Stock</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+
+        <div class="stat-card"
+        style="background:linear-gradient(135deg,#6f42c1,#59359a);">
+
+            <div class="stat-icon">
+
+                <i class="fas fa-arrow-right-arrow-left"></i>
+
+            </div>
+
+            <h2>{{ transaction_count }}</h2>
+
+            <p>Transactions</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+
+        <div class="stat-card"
+        style="background:linear-gradient(135deg,#fd7e14,#ca6510);">
+
+            <div class="stat-icon">
+
+                <i class="fas fa-indian-rupee-sign"></i>
+
+            </div>
+
+            <h2>₹{{ inventory_value }}</h2>
+
+            <p>Inventory Value</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- CHARTS -->
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="card-custom">
+
+                    <h4>
+
+                        Employee Overview
+
+                    </h4>
+
+                    <div class="chart-wrapper">
+
+                        <canvas
+                        id="employeeChart"
+                        style="
+                        max-width:220px;
+                        max-height:220px;
+                        ">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                  <div class="card-custom">
+
+                      <h4>
+
+                          Inventory Status 
+
+                      </h4>
+
+                      <div class="chart-wrapper">
+
+                          <canvas
+                          id="inventoryChart" 
+                          style="
+                          max-width:220px;
+                          max-height:220px;
+                          ">
+                          </canvas>
+
+                      </div>
+
+                  </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+
+
+        <!-- TABLES -->
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="card-custom">
+
+                    <h4>
+
+                        Recent Employees
+
+                    </h4>
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+
+                                <th>Department</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for employee in recent_employees %}
+
+                            <tr>
+
+                                <td>{{ employee.name }}</td>
+
+                                <td>{{ employee.department }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card-custom">
+
+                    <h4>
+
+                        Recent Transactions
+
+                    </h4>
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Product</th>
+
+                                <th>Type</th>
+
+                                <th>Qty</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for transaction in recent_transactions %}
+
+                            <tr>
+
+                                <td>
+                                    {{ transaction.product.product_name }}
+                                </td>
+
+                                <td>
+
+                                    {% if transaction.transaction_type == 'Added' %}
+
+                                    <span class="badge-added">
+
+                                        Added
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge-removed">
+
+                                        Removed
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {{ transaction.quantity_changed }}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+window.addEventListener('load', function(){
+
+const employeeCtx =
+document.getElementById(
+    'employeeChart'
+);
+
+if(employeeCtx){
+
+    new Chart(employeeCtx, {
+
+        type:'doughnut',
+
+        data:{
+
+            labels:
+            {{ department_labels|safe }},
+
+            datasets:[{
+
+                data:
+                {{ department_counts|safe }},
+
+                backgroundColor:[
+
+                    '#0d6efd',
+                    '#198754',
+                    '#dc3545',
+                    '#ffc107',
+                    '#6f42c1',
+                    '#20c997'
+
+                ]
+
+            }]
+        },
+
+        options:{
+
+            plugins:{
+
+                legend:{
+
+                    position:'right'
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+const inventoryCtx =
+document.getElementById(
+    'inventoryChart'
+);
+
+if(inventoryCtx){
+
+    new Chart(inventoryCtx, {
+
+        type:'doughnut',
+
+        data:{
+
+            labels:[
+
+                'In Stock',
+
+                'Low Stock',
+
+                'Out Of Stock'
+
+            ],
+
+            datasets:[{
+
+                data:[
+
+                    {{ in_stock_count }},
+
+                    {{ low_stock_inventory_count }},
+
+                    {{ out_of_stock_count }}
+
+                ],
+
+                backgroundColor:[
+
+                    '#198754',
+
+                    '#ffc107',
+
+                    '#dc3545'
+
+                ]
+
+            }]
+        },
+
+        options:{
+
+            plugins:{
+
+                legend:{
+
+                    position:'right'
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>

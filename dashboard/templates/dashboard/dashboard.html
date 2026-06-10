@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+ERP Dashboard
+</h1>
+
+<!-- MAIN STATS -->
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body text-center">
+                <h5>Total Employees</h5>
+                <h1>{{ employee_count }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body text-center">
+                <h5>Total Products</h5>
+                <h1>{{ product_count }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body text-center">
+                <h5>Low Stock</h5>
+                <h1>{{ low_stock_count }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-dark mb-3">
+            <div class="card-body text-center">
+                <h5>Inventory Value</h5>
+                <h3>₹ {{ inventory_value }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- INVENTORY STATUS CARDS -->
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <h5>In Stock</h5>
+                <h2>{{ in_stock_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <h5>Low Stock</h5>
+                <h2>{{ low_stock_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-danger">
+            <div class="card-body text-center">
+                <h5>Out Of Stock</h5>
+                <h2>{{ out_of_stock_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<!-- CHARTS -->
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h3>Employees by Department</h3>
+
+        <canvas id="departmentChart"></canvas>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <h3>Inventory Status</h3>
+
+        <canvas id="inventoryChart"></canvas>
+
+    </div>
+
+</div>
+
+<hr>
+
+<!-- RECENT DATA -->
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h3>Recent Employees</h3>
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+            </tr>
+
+            {% for employee in recent_employees %}
+
+            <tr>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.department }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <h3>Recent Products</h3>
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+            </tr>
+
+            {% for product in recent_products %}
+
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</div>
+
+<hr>
+
+<!-- DEPARTMENT STATS -->
+
+<h3>
+Employees By Department
+</h3>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Department</th>
+        <th>Count</th>
+    </tr>
+
+    {% for department in department_stats %}
+
+    <tr>
+        <td>{{ department.department }}</td>
+        <td>{{ department.total }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<hr>
+
+<!-- LOW STOCK PRODUCTS -->
+
+<h3 class="text-danger">
+⚠ Low Stock Products
+</h3>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+    </tr>
+
+    {% for product in low_stock_products %}
+
+    <tr>
+        <td>{{ product.product_name }}</td>
+        <td>{{ product.quantity }}</td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="2">
+            No Low Stock Products
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<hr>
+
+<!-- QUICK ACTIONS -->
+
+<h3>
+Quick Actions
+</h3>
+
+{% if user.is_superuser or user.groups.all.0.name == 'HR' %}
+
+<a
+href="/employees/create/"
+class="btn btn-primary">
+
+Add Employee
+
+</a>
+
+{% endif %}
+
+{% if user.is_superuser or user.groups.all.0.name == 'Inventory Manager' %}
+
+<a
+href="/inventory/create/"
+class="btn btn-success">
+
+Add Product
+
+</a>
+
+{% endif %}
+
+<script>
+
+window.addEventListener('load', function () {
+
+    const deptCtx =
+    document.getElementById('departmentChart');
+
+    if (deptCtx) {
+
+        new Chart(deptCtx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels:
+                {{ department_labels|safe }},
+
+                datasets: [{
+
+                    label: 'Employees',
+
+                    data:
+                    {{ department_counts|safe }},
+
+                    backgroundColor: [
+
+                        '#0d6efd',
+                        '#198754',
+                        '#dc3545',
+                        '#ffc107',
+                        '#6f42c1',
+                        '#fd7e14',
+                        '#20c997',
+                        '#0dcaf0',
+                        '#6610f2',
+                        '#d63384'
+
+                    ],
+
+                    borderWidth: 1
+
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+                }
+            }
+        });
+    }
+
+    const inventoryCtx =
+    document.getElementById('inventoryChart');
+
+    if (inventoryCtx) {
+
+        new Chart(inventoryCtx, {
+
+            type: 'pie',
+
+            data: {
+
+                labels:
+                {{ inventory_status_labels|safe }},
+
+                datasets: [{
+
+                    data:
+                    {{ inventory_status_counts|safe }},
+
+                    backgroundColor: [
+
+                        '#198754',
+                        '#ffc107',
+                        '#dc3545'
+
+                    ],
+
+                    borderWidth: 1
+
+                }]
+            },
+
+            options: {
+
+                responsive: true
+            }
+        });
+    }
+
+});
+
+</script>
+
+{% endblock %}

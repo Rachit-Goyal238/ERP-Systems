@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>
+Product Details
+</h2>
+
+<table class="table table-bordered">
+
+<tr>
+    <th>Product ID</th>
+    <td>{{ product.product_id }}</td>
+</tr>
+
+<tr>
+    <th>Product Name</th>
+    <td>{{ product.product_name }}</td>
+</tr>
+
+<tr>
+    <th>Quantity</th>
+    <td>{{ product.quantity }}</td>
+</tr>
+
+<tr>
+    <th>Price</th>
+    <td>₹ {{ product.price }}</td>
+</tr>
+
+<tr>
+    <th>Supplier</th>
+    <td>{{ product.supplier }}</td>
+</tr>
+
+</table>
+
+<a
+href="{% url 'product_list' %}"
+class="btn btn-secondary">
+
+Back
+
+</a>
+
+<a
+href="{% url 'product_update' product.id %}"
+class="btn btn-warning">
+
+Edit
+
+</a>
+
+{% endblock %}

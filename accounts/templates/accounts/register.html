@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ERP System - Register</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            font-family:'Segoe UI',sans-serif;
+            background:#f4f6fb;
+        }
+
+        .left-panel{
+            width:45%;
+            background:linear-gradient(
+                135deg,
+                #0d6efd,
+                #003c9e
+            );
+            color:white;
+            padding:70px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .dot-pattern{
+            position:absolute;
+            top:70px;
+            right:80px;
+            color:rgba(255,255,255,0.35);
+            font-size:18px;
+            letter-spacing:8px;
+            line-height:20px;
+        }
+
+        .wave{
+            position:absolute;
+            bottom:-120px;
+            left:-60px;
+            width:130%;
+            height:260px;
+            background:rgba(255,255,255,0.08);
+            border-radius:50%;
+        }
+
+        .logo-section{
+            margin-bottom:60px;
+        }
+
+        .logo-section h1{
+            font-size:44px;
+            font-weight:700;
+        }
+
+        .welcome{
+            margin-bottom:50px;
+        }
+
+        .welcome h2{
+            font-size:52px;
+            font-weight:700;
+            margin-bottom:20px;
+        }
+
+        .welcome p{
+            font-size:22px;
+            line-height:1.7;
+        }
+
+        .feature{
+            display:flex;
+            align-items:center;
+            margin-bottom:35px;
+        }
+
+        .feature-icon{
+            width:60px;
+            height:60px;
+            border-radius:50%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin-right:20px;
+            font-size:22px;
+        }
+
+        .employee{
+            background:#0dcaf0;
+        }
+
+        .inventory{
+            background:#20c997;
+        }
+
+        .analytics{
+            background:#a855f7;
+        }
+
+        .right-panel{
+            width:55%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .register-card{
+            width:580px;
+            background:white;
+            padding:55px;
+            border-radius:24px;
+            box-shadow:
+            0 15px 40px rgba(
+                0,0,0,0.10
+            );
+        }
+
+        .register-icon{
+            text-align:center;
+            font-size:72px;
+            color:#0d6efd;
+            margin-bottom:15px;
+        }
+
+        .register-title{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .btn-register{
+            width:100%;
+            height:52px;
+            background:#0d6efd;
+            color:white;
+            border:none;
+            font-weight:600;
+            font-size:18px;
+        }
+
+        .btn-register:hover{
+            background:#0b5ed7;
+            color:white;
+        }
+
+        .login-link{
+            text-align:center;
+            margin-top:20px;
+        }
+
+        @media(max-width:992px){
+
+            .left-panel{
+                display:none;
+            }
+
+            .right-panel{
+                width:100%;
+            }
+
+            .register-card{
+                width:90%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="left-panel">
+
+    <div class="dot-pattern">
+        •••••<br>
+        •••••<br>
+        •••••
+    </div>
+
+    <div class="logo-section">
+
+        <h1>
+
+            <i class="fas fa-building"></i>
+
+            ERP SYSTEM
+
+        </h1>
+
+        <div>
+
+            Evergreen Sales Corporation
+
+        </div>
+
+    </div>
+
+    <div class="welcome">
+
+        <h2>
+
+            Join The ERP Platform
+
+        </h2>
+
+        <p>
+
+            Create an account and gain access to
+            employee management, inventory tracking
+            and business analytics.
+
+        </p>
+
+    </div>
+
+    <div class="feature">
+
+        <div class="feature-icon employee">
+
+            <i class="fas fa-users"></i>
+
+        </div>
+
+        <div>
+
+            Employee Management
+
+        </div>
+
+    </div>
+
+    <div class="feature">
+
+        <div class="feature-icon inventory">
+
+            <i class="fas fa-box"></i>
+
+        </div>
+
+        <div>
+
+            Inventory Management
+
+        </div>
+
+    </div>
+
+    <div class="feature">
+
+        <div class="feature-icon analytics">
+
+            <i class="fas fa-chart-line"></i>
+
+        </div>
+
+        <div>
+
+            Dashboard Analytics
+
+        </div>
+
+    </div>
+
+    <div class="wave"></div>
+
+</div>
+
+<div class="right-panel">
+
+    <div class="register-card">
+
+        <div class="register-icon">
+
+            <i class="fas fa-user-plus"></i>
+
+        </div>
+
+        <div class="register-title">
+
+            <h2>
+
+                Create Account
+
+            </h2>
+
+            <p>
+
+                Register to access ERP services
+
+            </p>
+
+        </div>
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert alert-info">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="input-group mb-3">
+
+                <span class="input-group-text">
+
+                    <i class="fas fa-user"></i>
+
+                </span>
+
+                <input
+                type="text"
+                name="username"
+                class="form-control"
+                placeholder="Username">
+
+            </div>
+
+            <div class="input-group mb-3">
+
+                <span class="input-group-text">
+
+                    <i class="fas fa-envelope"></i>
+
+                </span>
+
+                <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Email Address">
+
+            </div>
+
+            <div class="input-group mb-3">
+
+                <span class="input-group-text">
+
+                    <i class="fas fa-lock"></i>
+
+                </span>
+
+                <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control"
+                placeholder="Password">
+
+            </div>
+
+            <div class="input-group mb-4">
+
+                <span class="input-group-text">
+
+                    <i class="fas fa-lock"></i>
+
+                </span>
+
+                <input
+                type="password"
+                name="confirm_password"
+                id="confirm_password"
+                class="form-control"
+                placeholder="Confirm Password">
+
+            </div>
+
+            <button
+            type="submit"
+            class="btn btn-register">
+
+                <i class="fas fa-user-plus me-2"></i>
+
+                Register
+
+            </button>
+
+        </form>
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="/accounts/login/">
+
+                Login Here
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
