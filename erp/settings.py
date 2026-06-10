@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#7ax+^ese!_^=j+-u9minejxy+fr48fm9m%x6&l!te$!8h3(gu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.up.railway.app']
 
 
 # Application definition
@@ -124,3 +124,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 LOGIN_URL = '/accounts/login/'
+CSRF_TRUSTED_ORIGINS = [
+    "https://evergreen-erp.up.railway.app",
+]
